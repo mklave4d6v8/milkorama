@@ -23,13 +23,13 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// FUNC: Loads and caches the list of milkable mobs from a JSON config file.
+// Loads and caches list of milkable mobs from a JSON config file.
 public class MilkConfig {
 	private static final Logger LOG = LogManager.getLogger("milkorama");
 
 	private static final String SUBDIR = "ivl";
 	private static final String FILE_NAME = "milkorama.json";
-	private static final String KEY_MILKABLE = "milkable";
+	private static final String KEY_MILKABLE = "milkableEntities";
 	private static final String PLAYER_TOKEN = "player";
 	private static final String[] DEFAULTS = { "minecraft:pig", "minecraft:enderman", PLAYER_TOKEN };
 
@@ -41,12 +41,11 @@ public class MilkConfig {
 	private MilkConfig() {
 	}
 
-	// FUNC: Reads the config from the given directory, writing defaults if missing or broken.
+	// Reads the config from the given directory, writing defaults if missing or broken.
 	public static void load(File configDir) {
 		File dir = new File(configDir, SUBDIR);
 		if (!dir.exists() && !dir.mkdirs()) {
-			// RETYPEME: If we cannot create the mod's config folder, we fall back to defaults
-			// and tell the player where the list refused to live.
+			// Error handling. If we can't create the mod's config folder, we fall back to defaults.
 			LOG.warn("Could not create config dir {}, using default milkable list", dir);
 			resetDefaults();
 			return;
@@ -58,7 +57,7 @@ public class MilkConfig {
 			writeDefaults(file);
 		}
 
-		// RETYPEME: Try to parse the JSON file; any failure drops back to the default list.
+		// Try to parse the JSON file; any failure drops back to the default list.
 		try {
 			JsonObject root = new JsonParser().parse(new FileReader(file)).getAsJsonObject();
 			JsonElement milkableMember = root.get(KEY_MILKABLE);
@@ -73,7 +72,7 @@ public class MilkConfig {
 		}
 	}
 
-	// FUNC: Rewrites the config file with the default milkable list.
+	// Writes or rewrites the config file with the default milkable list.
 	private static void writeDefaults(File file) {
 		try (FileWriter writer = new FileWriter(file)) {
 			JsonObject root = new JsonObject();
@@ -89,7 +88,7 @@ public class MilkConfig {
 		}
 	}
 
-	// FUNC: Rebuilds the in-memory list from the default entries.
+	// Rebuilds the in-memory list from the default entries.
 	private static void resetDefaults() {
 		milkableIds.clear();
 		milkablePlayer = false;
@@ -98,7 +97,7 @@ public class MilkConfig {
 		}
 	}
 
-	// FUNC: Feeds every entry from the config's milkable array into the lookup set.
+	// Feeds every entry from the config's milkable entities array into the lookup set.
 	private static void parseMilkable(JsonArray list) {
 		milkableIds.clear();
 		milkablePlayer = false;
@@ -111,7 +110,7 @@ public class MilkConfig {
 		}
 	}
 
-	// FUNC: Normalizes one config entry and adds it to the lookup set.
+	// Normalizes one config entry and adds it to the lookup set.
 	private static void addMilkableString(String rawId) {
 		String id = rawId.trim();
 		if (id.isEmpty()) {
@@ -122,8 +121,8 @@ public class MilkConfig {
 			milkablePlayer = true;
 			return;
 		}
-		// RETYPEME: Registry names are lowercase; bare names without a namespace default to minecraft.
-		if (!id.contains(":")) {
+		// Registry names are lowercase; bare names without a namespace default to minecraft, unless it is "player".
+		if (!id.contains(":") & !id.equalsIgnoreCase(PLAYER_TOKEN)) {
 			id = "minecraft:" + id;
 		}
 		id = id.toLowerCase();
@@ -134,7 +133,7 @@ public class MilkConfig {
 		}
 	}
 
-	// FUNC: Asks whether the given entity is on the milkable list.
+	// Pokes lists to check if our entity is on the milkable list.
 	public static boolean isMilkable(Entity target) {
 		if (milkablePlayer && target instanceof EntityPlayer) {
 			return true;

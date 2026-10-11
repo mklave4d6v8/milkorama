@@ -11,21 +11,18 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-// FUNC: Handles right-click milking of any entity on the configured list.
+// Handles right-click milking of any entity on the configured list.
 public class MilkEventHandler {
 
-	// FUNC: Called when a player right-clicks an entity, turning a milkable mob into a milk bucket.
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		// RETYPEME: Only the server handles the milking; the client just gets its
-		// inventory synced back once the swap happens.
+		// Only the server handles the milking, the client just gets its inventory synced back afterward.
 		if (event.getWorld().isRemote) {
 			return;
 		}
 
 		EntityPlayer player = event.getEntityPlayer();
-		// RETYPEME: Mirror vanilla cows, which refuse to be milked by a creative
-		// player, before we even look at what the click target is.
+		// Mirror vanilla cows milking, which only happens in creative mode.
 		if (player.capabilities.isCreativeMode) {
 			return;
 		}
@@ -39,8 +36,7 @@ public class MilkEventHandler {
 			return;
 		}
 
-		// RETYPEME: Mimic the cow's own milking: one bucket in, one milk bucket
-		// out, with a fresh splash of cow-milk sound for good measure.
+		// Swap empty bucket for full one and play the noise. EZPZ
 		player.world.playSound(null, player.posX, player.posY, player.posZ,
 				SoundEvents.ENTITY_COW_MILK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		held.shrink(1);
