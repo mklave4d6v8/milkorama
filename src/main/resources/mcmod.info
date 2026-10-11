@@ -1,14 +1,14 @@
 [
 {
-  "modid": "template_mod",
-  "name": "Forge Template Mod",
-  "description": "Example forge mod.",
+  "modid": "milkorama",
+  "name": "Milkorama",
+  "description": "Collect milk from a configurable list of mobs.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["ivl"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
