@@ -2,6 +2,7 @@ package ivl.milkorama;
 
 import ivl.milkorama.config.MilkConfig;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -15,10 +16,11 @@ public class Milkorama {
 
 	// FUNC: Called once at startup, before anything else is set up.
 	// RETYPEME: Pre-initialization reads the milkable-mob config from the
-	// Minecraft configuration directory so the list is ready before any entity
-	// can be milked.
+	// Minecraft configuration directory and hooks the milking event handler onto
+	// the Forge event bus, ready before worlds load.
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MilkConfig.load(event.getModConfigurationDirectory());
+		MinecraftForge.EVENT_BUS.register(new MilkEventHandler());
 	}
 }
