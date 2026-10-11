@@ -31,7 +31,7 @@ public class MilkConfig {
 	private static final String FILE_NAME = "milkorama.json";
 	private static final String KEY_MILKABLE = "milkableEntities";
 	private static final String PLAYER_TOKEN = "player";
-	private static final String[] DEFAULTS = { "minecraft:pig", "minecraft:enderman", PLAYER_TOKEN };
+	private static final String[] DEFAULTS = { "minecraft:sheep", "minecraft:llama", PLAYER_TOKEN };
 
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
