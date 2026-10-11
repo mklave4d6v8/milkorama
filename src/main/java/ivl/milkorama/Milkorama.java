@@ -1,5 +1,7 @@
 package ivl.milkorama;
 
+import ivl.milkorama.config.MilkConfig;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -12,9 +14,11 @@ public class Milkorama {
 	public static final String VERSION = "0.0.1";
 
 	// FUNC: Called once at startup, before anything else is set up.
-	// RETYPEME: This is where the mod reads the milkable-mob config file; later
-	// tasks will fill it with the actual config loading call.
+	// RETYPEME: Pre-initialization reads the milkable-mob config from the
+	// Minecraft configuration directory so the list is ready before any entity
+	// can be milked.
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		MilkConfig.load(event.getModConfigurationDirectory());
 	}
 }
